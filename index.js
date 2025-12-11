@@ -128,6 +128,12 @@ app.put('/stores/:id',
     if (payload && payload.store) payload = payload.store;
     req.body = payload;
 
+    // Check validation errors first
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     // check if exists
     db.get('SELECT * FROM stores WHERE id = ?', [id], (err, existing) => {
       if (err) {
@@ -135,11 +141,6 @@ app.put('/stores/:id',
         return res.status(500).json({ error: 'DB error' });
       }
       if (!existing) return res.status(404).json({ error: 'Store not found' });
-
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-      }
 
       // merge
       const name = payload.name !== undefined ? payload.name : existing.name;
