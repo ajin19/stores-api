@@ -17,6 +17,14 @@ app.use('/docs', express.static(path.join(__dirname, 'docs')));
 app.get('/docs/api-docs.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'docs', 'api-docs.html'));
 });
+// redirect /docs to the main docs page
+app.get('/docs', (req, res) => {
+  res.redirect('/docs/api-docs.html');
+});
+// also expose the docs page at /api-docs.html for convenience
+app.get('/api-docs.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'docs', 'api-docs.html'));
+});
 
 // parse JSON
 app.use(bodyParser.json({ limit: '1mb' }));
