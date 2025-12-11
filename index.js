@@ -13,6 +13,10 @@ app.use(helmet());
 app.use(cors());
 // serve API docs static folder at /docs
 app.use('/docs', express.static(path.join(__dirname, 'docs')));
+// explicit single-file route for the main docs page (helps with some hosting proxies)
+app.get('/docs/api-docs.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'docs', 'api-docs.html'));
+});
 
 // parse JSON
 app.use(bodyParser.json({ limit: '1mb' }));
