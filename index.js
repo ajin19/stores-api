@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const xml2js = require('xml2js');
 const js2xmlparser = require('js2xmlparser');
@@ -10,6 +11,8 @@ const { body, validationResult } = require('express-validator');
 const app = express();
 app.use(helmet());
 app.use(cors());
+// serve API docs static folder at /docs
+app.use('/docs', express.static(path.join(__dirname, 'docs')));
 
 // parse JSON
 app.use(bodyParser.json({ limit: '1mb' }));
